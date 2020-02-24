@@ -5,7 +5,13 @@
     <ul class='events-list' id='events'>
       <li class='events-item' v-for='event in events' :key='event.uid'>
         <p class='events-item__name'>{{ event.summary }}</p>
-        <p class='events-item__date'>{{ event.start }} до {{ event.end }}</p>
+        <p class='events-item__date'>Дата проведения: {{ getFormattedDate(event.start) }}
+          <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.start)">
+            до {{ getFormattedDate(event.end) }}</span></p>
+        <p>
+          Время проведения: c {{ getFormattedTime(event.start) }}
+          до {{ getFormattedTime(event.end) }}
+        </p>
         <p class='events-item__location'>г. {{ event.location }}</p>
         <a class='events-item__orgs' :href='event.description' alt='' target="_blank">Подробнее</a>
       </li>
@@ -104,14 +110,15 @@ export default {
         futureEvents.push(element);
       }
     });
-    console.log(futureEvents);
-
-    // let futureEvents = data.filter();
-    // Андрей предложил прочто фильтр делать -как более надежно, в случае если даты перемещаются
-    // как-то то фильтр отработает в любом случае, а медиана может ошибиться
-    // getMedian - цикл с поиском когда следующий элемент по дате позже текущей даты
-    // futureEvents - делаем splice по массиву от 0 индекса (если reverse) до индекса медианы
-    // pastEvents - splice от индекса медианы до конца массива
+    console.log(futureEvents[1].end + futureEvents[1].start);
+  },
+  methods: {
+    getFormattedDate(rawDate) {
+      return new Date(rawDate).toLocaleDateString();
+    },
+    getFormattedTime(rawDate) {
+      return new Date(rawDate).toLocaleTimeString().slice(0, 5);
+    },
   },
 };
 </script>
