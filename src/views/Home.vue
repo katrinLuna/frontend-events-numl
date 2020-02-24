@@ -92,8 +92,26 @@ export default {
   },
   eve: [],
   async mounted() {
-    this.eve = await EventsService.getAll();
-    console.log(await this.eve.json());
+    const rawData = await EventsService.getAll();
+    const data = await rawData.json();
+    const currentDate = new Date().toJSON().slice(0, 10);
+    const futureEvents = [];
+    const pastEvents = [];
+    data.forEach((element) => {
+      if (element.end.slice(0, 10) < currentDate) {
+        pastEvents.push(element);
+      } else {
+        futureEvents.push(element);
+      }
+    });
+    console.log(futureEvents);
+
+    // let futureEvents = data.filter();
+    // Андрей предложил прочто фильтр делать -как более надежно, в случае если даты перемещаются
+    // как-то то фильтр отработает в любом случае, а медиана может ошибиться
+    // getMedian - цикл с поиском когда следующий элемент по дате позже текущей даты
+    // futureEvents - делаем splice по массиву от 0 индекса (если reverse) до индекса медианы
+    // pastEvents - splice от индекса медианы до конца массива
   },
 };
 </script>
