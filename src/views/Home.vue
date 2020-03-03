@@ -4,7 +4,11 @@
     <!-- <HelloWorld msg='Welcome to Your Vue.js App' /> -->
     <button type="button" v-on:click="type = 'future'">Будущие</button>
     <button type="button" v-on:click="type = 'past'">Прошедшие</button>
+    <input type="text" value="" v-model="searchQuery" placeholder="Город проведения"/>
     <ul class='events-list' id='events'>
+      <!-- обернуть в темплейт чтобы показывались только те у которых название города
+      совпадает с городом проведения посимвольно фильтрация  --
+      или надо сделать функцию которая будет value фильтровать и в events подставлять-->
       <li class='events-item' v-for='event in events' :key='event.uid'>
         <p class='events-item__name'>{{ event.summary }}</p>
         <p class='events-item__date'>Дата проведения: {{ getFormattedDate(event.start) }}
@@ -40,6 +44,7 @@ export default {
       pastEvents: [],
       futureEvents: [],
       type: 'future',
+      searchQuery: '',
     };
   },
   async mounted() {
@@ -60,7 +65,11 @@ export default {
   },
   computed: {
     events() {
-      return this.type === 'future' ? this.futureEvents : this.pastEvents;
+      const currentEvent = this.type === 'future' ? this.futureEvents : this.pastEvents;
+      if (this.searchQuery.length > 2) {
+        return currentEvent.filter((event) => event.location.includes(this.searchQuery));
+      }
+      return currentEvent;
     },
   },
   methods: {
