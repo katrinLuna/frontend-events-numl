@@ -4,11 +4,9 @@
     <!-- <HelloWorld msg='Welcome to Your Vue.js App' /> -->
     <button type="button" v-on:click="type = 'future'">Будущие</button>
     <button type="button" v-on:click="type = 'past'">Прошедшие</button>
+    <button type="button" v-on:click="type = 'today'">Сегодня</button>
     <input type="text" value="" v-model="searchQuery" placeholder="Город проведения"/>
     <ul class='events-list' id='events'>
-      <!-- обернуть в темплейт чтобы показывались только те у которых название города
-      совпадает с городом проведения посимвольно фильтрация  --
-      или надо сделать функцию которая будет value фильтровать и в events подставлять-->
       <li class='events-item' v-for='event in events' :key='event.uid'>
         <p class='events-item__name'>{{ event.summary }}</p>
         <p class='events-item__date'>Дата проведения: {{ getFormattedDate(event.start) }}
@@ -39,12 +37,12 @@ export default {
     // HelloWorld,
   },
   data() {
-    // eventsPeriod: future,
     return {
       pastEvents: [],
       futureEvents: [],
       type: 'future',
       searchQuery: '',
+      currentDate: '',
     };
   },
   async mounted() {
@@ -62,10 +60,26 @@ export default {
     });
     this.futureEvents = futureEvents;
     this.pastEvents = pastEvents.reverse();
+    this.currentDate = currentDate;
   },
   computed: {
     events() {
-      const currentEvent = this.type === 'future' ? this.futureEvents : this.pastEvents;
+      let currentEvent = [];
+      switch (this.type) {
+        case 'future':
+          currentEvent = this.futureEvents;
+          break;
+        case 'past':
+          currentEvent = this.pastEvents;
+          break;
+        case 'today':
+          currentEvent = this.futureEvents
+            .filter((event) => event.start.slice(0, 10) === this.currentDate);
+          break;
+        default:
+          currentEvent = this.futureEvents;
+          break;
+      }
       if (this.searchQuery.length > 2) {
         return currentEvent.filter((event) => event.location.includes(this.searchQuery));
       }
