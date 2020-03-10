@@ -23,6 +23,12 @@
         <a class='events-item__orgs' :href='event.description' alt='' target="_blank">Подробнее</a>
       </li>
     </ul>
+    <div class="empty-search-result" v-if="events.length === 0">
+      <p>Событий
+          <span v-if="searchQuery">в данном городе</span>
+        не найдено
+      </p>
+    </div>
   </div>
 </template>
 
@@ -85,6 +91,8 @@ export default {
       }
       return currentEvent;
     },
+    // limit в дату положить, а тут хранить по лимиту обрезанное число
+    // элементов отображения элементов - увеличивать при нажатии на кнопку
   },
   methods: {
     getFormattedDate(rawDate) {
