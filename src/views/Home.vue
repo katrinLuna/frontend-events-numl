@@ -18,17 +18,13 @@
   <div class='home'>
     <!-- <img alt='Vue logo' src='../assets/logo.png' /> -->
     <!-- <HelloWorld msg='Welcome to Your Vue.js App' /> -->
-    <button type="button" v-on:click="type = 'future'">Будущие</button>
-    <button type="button" v-on:click="type = 'past'">Прошедшие</button>
+    <button type="button" v-on:click="type = 'future'; shownLimit = limitStep">Будущие</button>
+    <button type="button" v-on:click="type = 'past'; shownLimit = limitStep">Прошедшие</button>
     <button type="button" v-on:click="type = 'today'">Сегодня</button>
     <input type="text" value="" v-model="searchQuery" placeholder="Город проведения"/>
 
-    <div class="show-more-btn-wrapper" v-if="type === 'past'">
-      <button type="button">Показать ещё</button>
-    </div>
-
     <ul class="events-list" id="events">
-      <li class="events-item" v-for="event in events" :key="event.uid">
+      <li class="events-item" v-for="event in shownEvents" :key="event.uid">
         <p class="events-item__name">{{ event.summary }}</p>
         <p class="events-item__date">Дата проведения: {{ getFormattedDate(event.start) }}
           <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
@@ -44,11 +40,16 @@
         <a class="events-item__orgs" :href="event.description" alt="" target="_blank">Подробнее</a>
       </li>
     </ul>
+
+    <div class="show-more-btn-wrapper" v-if="filteredEvents.length > shownLimit">
+      <button type="button" v-on:click="shownLimit += limitStep">Показать ещё</button>
+    </div>
+
     <div class="upload-data" v-if="isLoaded">
       <p>Данные загружаются</p>
     </div>
 
-    <div class="empty-search-result" v-if="events.length === 0 && !isLoaded">
+    <div class="empty-search-result" v-if="shownEvents.length === 0 && !isLoaded">
       <p>Событий
           <span v-if="searchQuery">в данном городе</span>
         не найдено
@@ -75,6 +76,8 @@ export default {
       searchQuery: '',
       currentDate: '',
       isLoaded: true,
+      shownLimit: 10,
+      limitStep: 10,
     };
   },
   async mounted() {
@@ -113,13 +116,17 @@ export default {
           currentEvent = this.futureEvents;
           break;
       }
-      if (this.searchQuery.length > 2) {
-        return currentEvent.filter((event) => event.location.includes(this.searchQuery));
-      }
       return currentEvent;
     },
-    // limit в дату положить, а тут хранить по лимиту обрезанное число
-    // элементов отображения элементов - увеличивать при нажатии на кнопку
+    filteredEvents() {
+      if (this.searchQuery.length > 2) {
+        return this.events.filter((event) => event.location.includes(this.searchQuery));
+      }
+      return [...this.events];
+    },
+    shownEvents() {
+      return this.filteredEvents.slice(0, this.shownLimit);
+    },
   },
   methods: {
     getFormattedDate(rawDate) {
