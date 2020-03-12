@@ -78,6 +78,7 @@ export default {
       isLoaded: true,
       shownLimit: 10,
       limitStep: 10,
+      isCashed: false,
     };
   },
   async mounted() {
@@ -87,6 +88,8 @@ export default {
     const futureEvents = [];
     const pastEvents = [];
     data.forEach((element) => {
+      /* eslint-disable-next-line no-param-reassign */
+      element.searchLocation = element.location.toLowerCase();
       if (element.end.slice(0, 10) < currentDate) {
         pastEvents.push(element);
       } else {
@@ -119,8 +122,9 @@ export default {
       return currentEvent;
     },
     filteredEvents() {
-      if (this.searchQuery.length > 2) {
-        return this.events.filter((event) => event.location.includes(this.searchQuery));
+      if (this.searchQuery.length > 1) {
+        const searchValue = this.searchQuery.toLowerCase();
+        return this.events.filter((event) => event.searchLocation.includes(searchValue));
       }
       return [...this.events];
     },
@@ -135,6 +139,7 @@ export default {
     getFormattedTime(rawDate) {
       return new Date(rawDate).toLocaleTimeString().slice(0, 5);
     },
+
   },
 };
 </script>
