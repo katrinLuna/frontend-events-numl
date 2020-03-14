@@ -1,43 +1,169 @@
 <style lang="scss">
-.events-list {
-  display: grid;
-  padding-left: 0;
-  grid-template-columns: 1fr 1fr 1fr;
-  list-style-type: none;
-  gap: 20px 10px;
-}
-
-.events-item {
-  &__name {
-    color: red;
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #F1F7FA;;
   }
-}
+
+  .visually-hidden:not(:focus):not(:active),
+  input[type="checkbox"].visually-hidden,
+  input[type="radio"].visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+
+    white-space: nowrap;
+
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+  }
+
+  .home {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .filters {
+    @media (min-width: 768px) {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    @media (min-width: 1100px) {
+      width: 90%;
+      margin: 0 auto;
+    }
+  }
+
+  .period-btn-wrapper {
+    @media (min-width: 768px) {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .period-btn {
+    width: 125px;
+    height: 36px;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #49839f;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    background-image: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+
+    &:hover,
+    &:focus {
+      border-bottom: 2px solid #49839f;
+    }
+  }
+
+  .period-btn.active {
+    color: white;
+    filter: hue-rotate(45deg);
+    background-image: linear-gradient(-45deg, #a5d85f, #6399b3);
+    transition: all 0.2s easy;
+  }
+
+  .city-search {
+    width: 180px;
+    height: 36px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid grey;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .events-list {
+    list-style-type: none;
+    padding-left: 0;
+
+    @media (min-width: 768px) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 10px;
+    }
+
+    @media (min-width: 1100px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  .events-item {
+    &__name {
+      color: red;
+    }
+  }
 </style>
 
 <template>
   <div class='home'>
     <!-- <img alt='Vue logo' src='../assets/logo.png' /> -->
     <!-- <HelloWorld msg='Welcome to Your Vue.js App' /> -->
-    <button type="button" v-on:click="type = 'future'; shownLimit = limitStep">Будущие</button>
-    <button type="button" v-on:click="type = 'past'; shownLimit = limitStep">Прошедшие</button>
-    <button type="button" v-on:click="type = 'today'">Сегодня</button>
-    <input type="text" value="" v-model="searchQuery" placeholder="Город проведения"/>
+    <div class="filters">
+      <div class="period-btn-wrapper">
+        <button class="period-btn btn" type="button"
+          :class="{ active: type === 'future'}"
+          v-on:click="
+            type = 'future';
+            shownLimit = limitStep;">
+          Будущие
+        </button>
+        <button class="period-btn btn" type="button"
+        :class="{ active: type === 'past'}"
+          v-on:click="
+            type = 'past';
+            shownLimit = limitStep;">
+          Прошедшие
+        </button>
+        <button class="period-btn btn" type="button"
+        :class="{ active: type === 'today'}"
+          v-on:click="
+            type = 'today';">
+          Сегодня
+        </button>
+      </div>
+      <label>
+        <span class="visually-hidden">Город проведения</span>
+        <input class="city-search" type="text" value="" v-model="searchQuery"
+          placeholder="Город проведения"/>
+      </label>
+    </div>
 
     <ul class="events-list" id="events">
-      <li class="events-item" v-for="event in shownEvents" :key="event.uid">
-        <p class="events-item__name">{{ event.summary }}</p>
-        <p class="events-item__date">Дата проведения: {{ getFormattedDate(event.start) }}
-          <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
-            до {{ getFormattedDate(event.end) || 'ночи' }} </span>
-        </p>
-        <p>
-          Время проведения:
-          <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
-            до {{ getFormattedTime(event.end) }} </span>
-          <span v-if="event.allDay">весь день</span>
-        </p>
-        <p class="events-item__location">г. {{ event.location }}</p>
-        <a class="events-item__orgs" :href="event.description" alt="" target="_blank">Подробнее</a>
+      <li class="events-item"
+        v-for="event in shownEvents"
+        :key="event.uid">
+          <p class="events-item__name">{{ event.summary }}</p>
+          <p class="events-item__date">Дата проведения: {{ getFormattedDate(event.start) }}
+            <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
+              до {{ getFormattedDate(event.end) || 'ночи' }} </span>
+          </p>
+          <p>
+            Время проведения:
+            <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
+              до {{ getFormattedTime(event.end) }} </span>
+            <span v-if="event.allDay">весь день</span>
+          </p>
+          <p class="events-item__location">г. {{ event.location }}</p>
+          <a class="events-item__orgs" :href="event.description" alt=""
+            target="_blank">
+              Подробнее
+          </a>
       </li>
     </ul>
 
