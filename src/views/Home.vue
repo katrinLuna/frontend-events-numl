@@ -120,20 +120,23 @@
           :class="{ active: type === 'future'}"
           v-on:click="
             type = 'future';
-            shownLimit = limitStep;">
+            shownLimit = limitStep;
+            searchQuery = '';">
           Будущие
         </button>
         <button class="period-btn btn" type="button"
         :class="{ active: type === 'past'}"
           v-on:click="
             type = 'past';
-            shownLimit = limitStep;">
+            shownLimit = limitStep;
+            searchQuery = '';">
           Прошедшие
         </button>
         <button class="period-btn btn" type="button"
         :class="{ active: type === 'today'}"
           v-on:click="
-            type = 'today';">
+            type = 'today';
+            searchQuery = '';">
           Сегодня
         </button>
       </div>
