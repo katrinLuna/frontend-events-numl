@@ -2,6 +2,7 @@
   body {
     margin: 0;
     padding: 0;
+    padding-bottom: 40px;
     background-color: #F1F7FA;;
   }
 
@@ -27,28 +28,8 @@
     margin: 0 auto;
   }
 
-  .filters {
-    @media (min-width: 768px) {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-
-    @media (min-width: 1100px) {
-      width: 90%;
-      margin: 0 auto;
-    }
-  }
-
-  .period-btn-wrapper {
-    @media (min-width: 768px) {
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-
-  .period-btn {
-    width: 125px;
+  .btn {
+    min-width: 125px;
     height: 36px;
     padding: 10px;
     box-sizing: border-box;
@@ -71,12 +52,33 @@
     }
   }
 
-  .period-btn.active {
+  .btn.active {
     color: white;
     filter: hue-rotate(45deg);
     background-image: linear-gradient(-45deg, #a5d85f, #6399b3);
     transition: all 0.2s easy;
   }
+
+  .filters {
+    @media (min-width: 768px) {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    @media (min-width: 1100px) {
+      width: 90%;
+      margin: 0 auto;
+    }
+  }
+
+  .period-btn-wrapper {
+    @media (min-width: 768px) {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
 
   .city-search {
     width: 180px;
@@ -91,11 +93,12 @@
   .events-list {
     list-style-type: none;
     padding-left: 0;
+    margin-top: 45px;
 
     @media (min-width: 768px) {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px 10px;
+      gap: 20px 15px;
     }
 
     @media (min-width: 1100px) {
@@ -104,10 +107,37 @@
   }
 
   .events-item {
+    border: 1px solid #49839f;
+    border-radius: 5px;
+    background-color: #fafafd;
+    transform: skewX(0deg);
+
+      &:hover {
+        transform: skewX(-10deg);
+        transition: all 0.1s ease;
+      }
+
+    &__orgs {
+      text-decoration: none;
+      color: #2a5265;
+    }
+
+    @media (max-width: 768px) {
+      margin-bottom: 20px;
+    }
+
     &__name {
-      color: red;
+      font-size: 20px;
+      font-weight: 600;
+      color: #77bcab;
+    }
+
+
+    .show-more-btn {
+      width: 150px;
     }
   }
+
 </style>
 
 <template>
@@ -151,27 +181,27 @@
       <li class="events-item"
         v-for="event in shownEvents"
         :key="event.uid">
-          <p class="events-item__name">{{ event.summary }}</p>
-          <p class="events-item__date">Дата проведения: {{ getFormattedDate(event.start) }}
-            <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
-              до {{ getFormattedDate(event.end) || 'ночи' }} </span>
-          </p>
-          <p>
-            Время проведения:
-            <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
-              до {{ getFormattedTime(event.end) }} </span>
-            <span v-if="event.allDay">весь день</span>
-          </p>
-          <p class="events-item__location">г. {{ event.location }}</p>
-          <a class="events-item__orgs" :href="event.description" alt=""
-            target="_blank">
-              Подробнее
+          <a class="events-item__orgs" :href="event.description" target="_blank">
+            <p class="events-item__name">{{ event.summary }}</p>
+            <p class="events-item__date">Дата проведения: {{ getFormattedDate(event.start) }}
+              <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
+                до {{ getFormattedDate(event.end) || 'ночи' }} </span>
+            </p>
+            <p>
+              Время проведения:
+              <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
+                до {{ getFormattedTime(event.end) }} </span>
+              <span v-if="event.allDay">весь день</span>
+            </p>
+            <p class="events-item__location">г. {{ event.location }}</p>
           </a>
       </li>
     </ul>
 
     <div class="show-more-btn-wrapper" v-if="filteredEvents.length > shownLimit">
-      <button type="button" v-on:click="shownLimit += limitStep">Показать ещё</button>
+      <button class="btn show-more-btn" type="button" v-on:click="shownLimit += limitStep">
+        Показать ещё
+      </button>
     </div>
 
     <div class="upload-data" v-if="isLoaded">
