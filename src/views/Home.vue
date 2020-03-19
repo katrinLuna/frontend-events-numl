@@ -107,15 +107,9 @@
 
   .events-item {
     display: grid;
-    border: 1px solid #49839f;
     border-radius: 5px;
-    background-color: #fafafd;
+    background-color: #49839f87;
     transform: skewX(0deg);
-
-      &:hover {
-        transform: skewX(-10deg);
-        transition: all 0.1s ease;
-      }
 
     & p {
       margin-top: 0;
@@ -125,11 +119,19 @@
     &__link-wrapper {
       display: flex;
       flex-direction: column;
-      text-decoration: none;
       padding: 15px;
-      height: 100%;
+      border: 1px solid #49839f;
+      background-color: #fafafd;
+      border-radius: 5px;
       box-sizing: border-box;
+      text-decoration: none;
       color: #2a5265;
+      transform: translate(0, 0);
+      transition: transform 0.1s ease;
+
+      &:hover {
+        transform: translate(-5px, -5px);
+      }
     }
 
     @media (max-width: 768px) {
@@ -138,6 +140,7 @@
 
     &__name {
       flex-grow: 1;
+      padding: 0 5px;
       font-size: 20px;
       font-weight: 600;
       color: #77bcab;
