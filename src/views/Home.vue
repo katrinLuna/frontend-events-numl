@@ -79,7 +79,6 @@
     }
   }
 
-
   .city-search {
     width: 180px;
     height: 36px;
@@ -107,6 +106,7 @@
   }
 
   .events-item {
+    display: grid;
     border: 1px solid #49839f;
     border-radius: 5px;
     background-color: #fafafd;
@@ -117,8 +117,18 @@
         transition: all 0.1s ease;
       }
 
-    &__orgs {
+    & p {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    &__link-wrapper {
+      display: flex;
+      flex-direction: column;
       text-decoration: none;
+      padding: 15px;
+      height: 100%;
+      box-sizing: border-box;
       color: #2a5265;
     }
 
@@ -127,6 +137,7 @@
     }
 
     &__name {
+      flex-grow: 1;
       font-size: 20px;
       font-weight: 600;
       color: #77bcab;
@@ -171,7 +182,7 @@
         </button>
       </div>
       <label>
-        <span class="visually-hidden">Город проведения</span>
+        <span class="visually-hidden">Город</span>
         <input class="city-search" type="text" value="" v-model="searchQuery"
           placeholder="Город проведения"/>
       </label>
@@ -181,14 +192,14 @@
       <li class="events-item"
         v-for="event in shownEvents"
         :key="event.uid">
-          <a class="events-item__orgs" :href="event.description" target="_blank">
+          <a class="events-item__link-wrapper" :href="event.description" target="_blank">
             <p class="events-item__name">{{ event.summary }}</p>
-            <p class="events-item__date">Дата проведения: {{ getFormattedDate(event.start) }}
+            <p class="events-item__date">Дата:<br> {{ getFormattedDate(event.start) }}
               <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
                 до {{ getFormattedDate(event.end) || 'ночи' }} </span>
             </p>
             <p>
-              Время проведения:
+              Время:<br>
               <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
                 до {{ getFormattedTime(event.end) }} </span>
               <span v-if="event.allDay">весь день</span>
