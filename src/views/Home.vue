@@ -106,31 +106,49 @@
   }
 
   .events-item {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     border-radius: 5px;
-    background-color: #49839f87;
-    transform: skewX(0deg);
+    padding: 10px;
+    // background-color: #49839f87;
+    border: 1px solid #49839f;
+    background-color: #fafafd;
+    border-radius: 5px;
+
+    &:hover,
+    &:focus {
+      box-shadow: 0px 0px 27px -15px;
+    }
 
     & p {
       margin-top: 0;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &__date,
+    &__time,
+    &__location {
+      text-align: left;
     }
 
     &__link-wrapper {
-      display: flex;
-      flex-direction: column;
-      padding: 15px;
-      border: 1px solid #49839f;
-      background-color: #fafafd;
-      border-radius: 5px;
-      box-sizing: border-box;
+      display: grid;
+      place-content: center;
+      flex-grow: 1;
+      padding: 20px;
       text-decoration: none;
       color: #2a5265;
       transform: translate(0, 0);
       transition: transform 0.1s ease;
 
-      &:hover {
-        transform: translate(-5px, -5px);
+      &:hover p,
+      &:focus p {
+        // transform: scale(1.2);
+        color: #54819d;
       }
     }
 
@@ -139,9 +157,8 @@
     }
 
     &__name {
-      flex-grow: 1;
       padding: 0 5px;
-      font-size: 20px;
+      font-size: 25px;
       font-weight: 600;
       color: #77bcab;
     }
@@ -195,20 +212,25 @@
       <li class="events-item"
         v-for="event in shownEvents"
         :key="event.uid">
+          <p class="events-item__date">
+            {{ getFormattedDate(event.start) }}
+
+            <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
+              до {{ getFormattedDate(event.end) || 'ночи' }}
+            </span>
+          </p>
+          <p class="events-item__time">
+            <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
+              до {{ getFormattedTime(event.end) }}
+            </span>
+            <span v-if="event.allDay">весь день</span>
+          </p>
+
           <a class="events-item__link-wrapper" :href="event.description" target="_blank">
             <p class="events-item__name">{{ event.summary }}</p>
-            <p class="events-item__date">Дата:<br> {{ getFormattedDate(event.start) }}
-              <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
-                до {{ getFormattedDate(event.end) || 'ночи' }} </span>
-            </p>
-            <p>
-              Время:<br>
-              <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
-                до {{ getFormattedTime(event.end) }} </span>
-              <span v-if="event.allDay">весь день</span>
-            </p>
-            <p class="events-item__location">г. {{ event.location }}</p>
           </a>
+
+          <p class="events-item__location">г. {{ event.location }}</p>
       </li>
     </ul>
 
