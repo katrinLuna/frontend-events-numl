@@ -36,6 +36,7 @@
     color: #49839f;
     font-size: 16px;
     font-weight: bold;
+    line-height: 16px;
     border: none;
     border-radius: 5px;
     background-image: none;
@@ -56,7 +57,7 @@
     color: white;
     filter: hue-rotate(45deg);
     background-image: linear-gradient(-45deg, #a5d85f, #6399b3);
-    transition: all 0.2s easy;
+    transition: all 0.2s ease;
   }
 
   .filters {
@@ -73,9 +74,23 @@
   }
 
   .period-btn-wrapper {
+    @media (max-width: 768px) {
+      margin-bottom: 20px;
+    }
+
     @media (min-width: 768px) {
       display: flex;
       justify-content: space-between;
+    }
+  }
+
+  .period-btn {
+    @media (max-width: 768px) {
+      font-size: 18px;
+
+      &:last-child {
+        margin-top: 15px;
+      }
     }
   }
 
@@ -114,6 +129,7 @@
     border: 1px solid #49839f;
     background-color: #fafafd;
     border-radius: 5px;
+    transition: all 0.1s ease;
 
     &:hover,
     &:focus {
@@ -139,16 +155,21 @@
       display: grid;
       place-content: center;
       flex-grow: 1;
-      padding: 20px;
+      margin-left: -10px;
+      margin-right: -10px;
+      margin-bottom: 5px;
       text-decoration: none;
       color: #2a5265;
-      transform: translate(0, 0);
-      transition: transform 0.1s ease;
+      transition: all 0.1s ease;
 
       &:hover p,
       &:focus p {
-        // transform: scale(1.2);
         color: #54819d;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: #e6e6e6;
       }
     }
 
@@ -157,7 +178,7 @@
     }
 
     &__name {
-      padding: 0 5px;
+      padding: 20px 25px;
       font-size: 25px;
       font-weight: 600;
       color: #77bcab;
@@ -175,6 +196,7 @@
   <div class='home'>
     <!-- <img alt='Vue logo' src='../assets/logo.png' /> -->
     <!-- <HelloWorld msg='Welcome to Your Vue.js App' /> -->
+    <h1 class="visually-hidden">Календарь Веб-стандартов. Теперь наглядно.</h1>
     <div class="filters">
       <div class="period-btn-wrapper">
         <button class="period-btn btn" type="button"
