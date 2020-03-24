@@ -43,10 +43,6 @@
     background-color: transparent;
     cursor: pointer;
 
-    &:not(:last-child) {
-      margin-right: 20px;
-    }
-
     &:hover,
     &:focus {
       border-bottom: 2px solid #49839f;
@@ -74,7 +70,7 @@
   }
 
   .period-btn-wrapper {
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       margin-bottom: 20px;
     }
 
@@ -85,11 +81,21 @@
   }
 
   .period-btn {
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       font-size: 18px;
+
+      &:first-child {
+        margin-right: 20px;
+      }
 
       &:last-child {
         margin-top: 15px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      &:not(:last-child) {
+        margin-right: 20px;
       }
     }
   }
@@ -112,7 +118,7 @@
     @media (min-width: 768px) {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px 15px;
+      gap: 23px 20px;
     }
 
     @media (min-width: 1100px) {
@@ -173,7 +179,7 @@
       }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       margin-bottom: 20px;
     }
 
@@ -184,10 +190,19 @@
       color: #77bcab;
     }
 
-
-    .show-more-btn {
-      width: 150px;
+    &__footer {
+      display: flex;
+      justify-content: space-between;
+      line-height: 16px;
     }
+
+    &__time-icon {
+      margin-right: 5px;
+    }
+  }
+
+  .show-more-btn {
+    width: 150px;
   }
 
 </style>
@@ -235,24 +250,31 @@
         v-for="event in shownEvents"
         :key="event.uid">
           <p class="events-item__date">
+            <nu-icon name="calendar" role="img"></nu-icon>
             {{ getFormattedDate(event.start) }}
 
             <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
               до {{ getFormattedDate(event.end) || 'ночи' }}
             </span>
           </p>
-          <p class="events-item__time">
-            <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
-              до {{ getFormattedTime(event.end) }}
-            </span>
-            <span v-if="event.allDay">весь день</span>
-          </p>
 
           <a class="events-item__link-wrapper" :href="event.description" target="_blank">
             <p class="events-item__name">{{ event.summary }}</p>
           </a>
 
-          <p class="events-item__location">г. {{ event.location }}</p>
+          <div class="events-item__footer">
+            <p class="events-item__time">
+              <nu-icon class="events-item__time-icon" name="clock" role="img"> </nu-icon>
+              <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
+                до {{ getFormattedTime(event.end) }}
+              </span>
+              <span v-if="event.allDay">весь день</span>
+            </p>
+            <p class="events-item__location">
+              <nu-icon name="map-pin" role="img"></nu-icon>
+              {{ event.location }}
+            </p>
+          </div>
       </li>
     </ul>
 
