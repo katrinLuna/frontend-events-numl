@@ -114,6 +114,7 @@
     list-style-type: none;
     padding-left: 0;
     margin-top: 45px;
+    margin-bottom: 40px;
 
     @media (min-width: 768px) {
       display: grid;
@@ -137,18 +138,17 @@
     border-radius: 5px;
     transition: all 0.1s ease;
 
+    &__time-icon {
+      vertical-align: middle;
+    }
+
     &:hover,
     &:focus {
       box-shadow: 0px 0px 27px -15px;
     }
 
-    & p {
+    & > p {
       margin-top: 0;
-      margin-bottom: 5px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
     }
 
     &__date,
@@ -157,13 +157,19 @@
       text-align: left;
     }
 
+    &__date {
+      line-height: 16px;
+      margin-bottom: 8px;
+    }
+
     &__link-wrapper {
       display: grid;
       place-content: center;
       flex-grow: 1;
+      min-height: 100px;
       margin-left: -10px;
       margin-right: -10px;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       text-decoration: none;
       color: #2a5265;
       transition: all 0.1s ease;
@@ -184,16 +190,24 @@
     }
 
     &__name {
+      margin-top: 0;
+      margin-bottom: 0;
       padding: 20px 25px;
       font-size: 25px;
       font-weight: 600;
       color: #77bcab;
+      line-height: 30px;
     }
 
     &__footer {
       display: flex;
       justify-content: space-between;
       line-height: 16px;
+
+      & > p {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
     }
 
     &__time-icon {
@@ -203,6 +217,7 @@
 
   .show-more-btn {
     width: 150px;
+    margin-bottom: 40px;
   }
 
 </style>
@@ -251,10 +266,14 @@
         :key="event.uid">
           <p class="events-item__date">
             <nu-icon name="calendar" role="img"></nu-icon>
-            {{ getFormattedDate(event.start) }}
+            <span v-if="getFormattedDate(event.start) === getFormattedDate(event.end)">
+              {{ getFormattedDate(event.start) }}
+            </span>
 
             <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
-              до {{ getFormattedDate(event.end) || 'ночи' }}
+              {{ getFormattedDate(event.start).slice(0, -7) }}
+              &mdash;
+              {{ getFormattedDate(event.end) || 'ночи' }}
             </span>
           </p>
 
@@ -264,11 +283,14 @@
 
           <div class="events-item__footer">
             <p class="events-item__time">
-              <nu-icon class="events-item__time-icon" name="clock" role="img"> </nu-icon>
-              <span v-if="!event.allDay"> c {{ getFormattedTime(event.start) }}
+              <nu-icon class="events-item__time-icon" name="clock" role="img"></nu-icon>
+              <span v-if="!event.allDay">c {{ getFormattedTime(event.start) }}
                 до {{ getFormattedTime(event.end) }}
               </span>
-              <span v-if="event.allDay">весь день</span>
+              <span v-if="event.allDay">
+                весь день
+              </span>
+              <!-- 4 дня  5 дней-->
             </p>
             <p class="events-item__location">
               <nu-icon name="map-pin" role="img"></nu-icon>
@@ -278,8 +300,9 @@
       </li>
     </ul>
 
+
     <div class="show-more-btn-wrapper" v-if="filteredEvents.length > shownLimit">
-      <button class="btn show-more-btn" type="button" v-on:click="shownLimit += limitStep">
+      <button class="btn active show-more-btn" type="button" v-on:click="shownLimit += limitStep">
         Показать ещё
       </button>
     </div>
@@ -295,9 +318,17 @@
       </p>
     </div>
   </div>
+<!--
+import { format } from ‘date-fns’;
+
+format(date, ‘DD MMM YYYY’);
+
+(new Date()).toLocaleString('ru-RU', { weekday: 'long', year: 'numeric',
+month: 'long', day: 'numeric' }) -->
 </template>
 
 <script>
+// import { formatDistance, subDays } from 'date-fns';
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue';
 import EventsService from '../services/events-service';
@@ -373,7 +404,12 @@ export default {
   },
   methods: {
     getFormattedDate(rawDate) {
-      return new Date(rawDate).toLocaleDateString();
+      return new Date(rawDate).toLocaleString('ru-RU', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      });
     },
     getFormattedTime(rawDate) {
       return new Date(rawDate).toLocaleTimeString().slice(0, 5);
