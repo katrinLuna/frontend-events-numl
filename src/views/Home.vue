@@ -318,17 +318,9 @@
       </p>
     </div>
   </div>
-<!--
-import { format } from ‘date-fns’;
-
-format(date, ‘DD MMM YYYY’);
-
-(new Date()).toLocaleString('ru-RU', { weekday: 'long', year: 'numeric',
-month: 'long', day: 'numeric' }) -->
 </template>
 
 <script>
-// import { formatDistance, subDays } from 'date-fns';
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue';
 import EventsService from '../services/events-service';
@@ -412,7 +404,7 @@ export default {
       });
     },
     getFormattedTime(rawDate) {
-      return new Date(rawDate).toLocaleTimeString().slice(0, 5);
+      return new Date(rawDate).toLocaleTimeString('ru-RU', { hour12: false }).slice(0, 5);
     },
 
   },
