@@ -212,8 +212,12 @@
       }
     }
 
-    &__time-icon {
-      margin-right: 5px;
+    &__icon {
+      vertical-align: -0.15em;
+
+      &--time {
+        margin-right: 5px;
+      }
     }
   }
 
@@ -267,7 +271,7 @@
         v-for="event in shownEvents"
         :key="event.uid">
           <p class="events-item__date">
-            <nu-icon name="calendar" role="img"></nu-icon>
+            <calendar-icon size="1x" class="events-item__icon"></calendar-icon>
             <span v-if="getFormattedDate(event.start) === getFormattedDate(event.end)">
               {{ getFormattedDate(event.start) }}
             </span>
@@ -285,7 +289,8 @@
 
           <div class="events-item__footer">
             <p class="events-item__time">
-              <nu-icon class="events-item__time-icon" name="clock" role="img"></nu-icon>
+              <clock-icon size="1x" class="events-item__icon events-item__icon--time">
+              </clock-icon>
               <span v-if="!event.allDay">c {{ getFormattedTime(event.start) }}
                 до {{ getFormattedTime(event.end) }}
               </span>
@@ -295,7 +300,7 @@
               <!-- 4 дня  5 дней-->
             </p>
             <p class="events-item__location">
-              <nu-icon name="map-pin" role="img"></nu-icon>
+              <map-pin-icon size="1x" class="events-item__icon"></map-pin-icon>
               {{ event.location }}
             </p>
           </div>
@@ -325,11 +330,15 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue';
+import { MapPinIcon, ClockIcon, CalendarIcon } from 'vue-feather-icons';
 import EventsService from '../services/events-service';
 
 export default {
   name: 'Home',
   components: {
+    MapPinIcon,
+    ClockIcon,
+    CalendarIcon,
     // HelloWorld,
   },
   data() {
