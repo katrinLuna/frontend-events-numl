@@ -3,7 +3,8 @@
     margin: 0;
     padding: 0;
     padding-bottom: 40px;
-    background-color: #F1F7FA;;
+    background-color: #F1F7FA;
+    // background-color: #f7f9fe;
   }
 
   .visually-hidden:not(:focus):not(:active),
@@ -132,7 +133,6 @@
     flex-direction: column;
     border-radius: 5px;
     padding: 10px;
-    // background-color: #49839f87;
     border: 1px solid #49839f;
     background-color: #fafafd;
     border-radius: 5px;
@@ -154,11 +154,13 @@
     &__date,
     &__time,
     &__location {
+      font-size: 16px;
+      font-weight: 500;
       text-align: left;
+      line-height: 16px;
     }
 
     &__date {
-      line-height: 16px;
       margin-bottom: 8px;
     }
 
