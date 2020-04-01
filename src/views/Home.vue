@@ -124,6 +124,7 @@
     }
 
     @media (min-width: 1100px) {
+      // grid-template-columns: 27% 27% 27%; найти фикс для IE
       grid-template-columns: 1fr 1fr 1fr;
     }
   }
@@ -226,6 +227,10 @@
     margin-bottom: 40px;
   }
 
+  // @media (hover: hover) { стили с ховером }
+
+  // @media not all and (hover: none) { стили с ховером }
+
 </style>
 
 <template>
@@ -295,9 +300,8 @@
                 до {{ getFormattedTime(event.end) }}
               </span>
               <span v-if="event.allDay">
-                весь день
+                {{ event.daysCounted }} дня
               </span>
-              <!-- 4 дня  5 дней-->
             </p>
             <p class="events-item__location">
               <map-pin-icon size="1x" class="events-item__icon"></map-pin-icon>
@@ -363,6 +367,11 @@ export default {
     data.forEach((element) => {
       /* eslint-disable-next-line no-param-reassign */
       element.searchLocation = element.location.toLowerCase();
+      if (element.allDay) {
+        /* eslint-disable-next-line no-param-reassign */
+        element.daysCounted = Math.ceil((new Date(element.end).getTime()
+        - new Date(element.start).getTime()) / 24 / 3600 / 1000);
+      }
       if (element.end.slice(0, 10) < currentDate) {
         pastEvents.push(element);
       } else {
