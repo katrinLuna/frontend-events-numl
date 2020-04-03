@@ -281,10 +281,11 @@
               {{ getFormattedDate(event.start) }}
             </span>
 
-            <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)">
+            <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)
+              && event.allDay">
               {{ getFormattedDate(event.start).slice(0, -7) }}
               &mdash;
-              {{ getFormattedDate(event.end) || 'ночи' }}
+              {{ getFormattedDate(event.endCorrected) || 'ночи' }}
             </span>
           </p>
 
@@ -370,7 +371,11 @@ export default {
       if (element.allDay) {
         /* eslint-disable-next-line no-param-reassign */
         element.daysCounted = Math.ceil((new Date(element.end).getTime()
-        - new Date(element.start).getTime()) / 24 / 3600 / 1000);
+        - new Date(element.start).getTime())
+         / 24 / 3600 / 1000);
+        /* eslint-disable-next-line no-param-reassign */
+        element.endCorrected = new Date(new Date(element.end).getTime() - (1000 * 3600 * 24));
+        // minus 1 day for event ends at midnight
       }
       if (element.end.slice(0, 10) < currentDate) {
         pastEvents.push(element);
