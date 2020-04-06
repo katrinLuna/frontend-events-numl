@@ -277,15 +277,17 @@
         :key="event.uid">
           <p class="events-item__date">
             <calendar-icon size="1x" class="events-item__icon"></calendar-icon>
-            <span v-if="getFormattedDate(event.start) === getFormattedDate(event.end)">
+            <span v-if="getFormattedDate(event.start) === getFormattedDate(event.end)
+            || event.daysCounted === 1">
               {{ getFormattedDate(event.start) }}
             </span>
 
             <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)
-              && event.allDay">
+            && event.daysCounted !== 1">
               {{ getFormattedDate(event.start).slice(0, -7) }}
               &mdash;
-              {{ getFormattedDate(event.endCorrected) || 'ночи' }}
+              {{ event.endCorrected ? getFormattedDate(event.endCorrected)
+              : getFormattedDate(event.end) }}
             </span>
           </p>
 
@@ -301,7 +303,7 @@
                 до {{ getFormattedTime(event.end) }}
               </span>
               <span v-if="event.allDay">
-                {{ event.daysCounted }} дня
+                {{ getDaysDeclension(event.daysCounted) }}
               </span>
             </p>
             <p class="events-item__location">
@@ -430,6 +432,19 @@ export default {
     },
     getFormattedTime(rawDate) {
       return new Date(rawDate).toLocaleTimeString('ru-RU', { hour12: false }).slice(0, 5);
+    },
+    getDaysDeclension(dayNumber) {
+      let word;
+      if (dayNumber === 1) {
+        word = 'весь день';
+      } else if (dayNumber > 1 || dayNumber < 5) {
+        // eslint-disable-next-line prefer-template
+        word = dayNumber + ' дня';
+      } else {
+        // eslint-disable-next-line prefer-template
+        word = dayNumber + ' дней';
+      }
+      return word;
     },
 
   },
