@@ -19,13 +19,26 @@
 
 #nav {
   padding: 30px;
+  display: flex;
 
   a {
     font-weight: bold;
+    font-size: 20px;
     color: #2c3e50;
+    flex-basis: 50%;
 
     &.router-link-exact-active {
       color: #42b983;
+    }
+
+    &:first-child {
+     text-align: right;
+     margin-right: 10px;
+    }
+
+    &:last-child {
+      text-align: left;
+      margin-left: 10px;
     }
   }
 }
