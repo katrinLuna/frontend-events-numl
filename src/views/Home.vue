@@ -2,7 +2,11 @@
   <div class='home'>
     <!-- <img alt='Vue logo' src='../assets/logo.png' /> -->
     <!-- <HelloWorld msg='Welcome to Your Vue.js App' /> -->
-    <h1 class="visually-hidden">Календарь Веб-стандартов. Теперь наглядно.</h1>
+    <h1 class="page-header">Календарь
+      <a href="https://github.com/web-standards-ru/calendar" target="_blank">Веб-стандартов</a>.
+      <span>Теперь наглядно.*</span>
+      <span class="page-header__description">*non-official version</span>
+    </h1>
     <div class="filters">
       <div class="period-btn-wrapper">
         <button class="period-btn btn" type="button"
@@ -217,31 +221,6 @@ export default {
 </script>
 
 <style lang="scss">
-  body {
-    margin: 0;
-    padding: 0;
-    padding-bottom: 40px;
-    background-color: #F1F7FA;
-    // background-color: #f7f9fe;
-  }
-
-  .visually-hidden:not(:focus):not(:active),
-  input[type="checkbox"].visually-hidden,
-  input[type="radio"].visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    border: 0;
-    padding: 0;
-
-    white-space: nowrap;
-
-    clip-path: inset(100%);
-    clip: rect(0 0 0 0);
-    overflow: hidden;
-  }
-
   .home {
     width: 90%;
     margin: 0 auto;
@@ -273,6 +252,29 @@ export default {
     filter: hue-rotate(45deg);
     background-image: linear-gradient(-45deg, #a5d85f, #6399b3);
     transition: all 0.2s ease;
+  }
+
+  .page-header {
+    font-size: 27px;
+    margin-top: 30px;
+    margin-bottom: 35px;
+    text-align: center;
+      color: #2c3e50;
+
+    &__description {
+      display: block;
+      font-size: 14px;
+      text-align: right;
+    }
+
+    & > span,
+    & > a {
+      white-space: nowrap;
+    }
+
+    & > a {
+      color: #2c3e50;
+    }
   }
 
   .filters {

@@ -1,14 +1,44 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <!-- <div id="nav">
       <router-link to="/">События</router-link> |
       <router-link to="/about">О календаре</router-link>
-    </div>
+    </div> -->
     <router-view/>
+    <p class="project-autor">
+      made w/love by
+      <a class="project-autor__name" href="https://github.com/katrinLuna" target="_blank">
+        Katrin Luna
+      </a>
+    </p>
   </div>
 </template>
 
 <style lang="scss">
+body {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 25px;
+  background-color: #F1F7FA;
+}
+
+.visually-hidden:not(:focus):not(:active),
+input[type="checkbox"].visually-hidden,
+input[type="radio"].visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+
+  white-space: nowrap;
+
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
 #app {
   font-family: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
