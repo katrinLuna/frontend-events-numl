@@ -395,15 +395,18 @@ export default {
       color: #2a5265;
       transition: all 0.1s ease;
 
-      &:hover p,
-      &:focus p {
-        color: #54819d;
+      @media (hover: hover) {
+        &:hover p,
+        &:focus p {
+          color: #54819d;
+        }
+
+        &:hover,
+        &:focus {
+          background-color: #e6e6e6;
+        }
       }
 
-      &:hover,
-      &:focus {
-        background-color: #e6e6e6;
-      }
     }
 
     @media (max-width: 767px) {
@@ -444,9 +447,5 @@ export default {
     width: 150px;
     margin-bottom: 40px;
   }
-
-  // @media (hover: hover) { стили с ховером }
-
-  // @media not all and (hover: none) { стили с ховером }
 
 </style>
