@@ -71,8 +71,7 @@
               <span v-if="!event.allDay">c {{ getFormattedTime(event.start) }}
                 до {{ getFormattedTime(event.end) }}
               </span>
-              <span v-if="event.allDay">
-                {{ getDaysDeclension(event.daysCounted) }}
+              <span v-if="event.allDay">{{ getDaysDeclension(event.daysCounted) }}
               </span>
             </p>
             <p class="events-item__location">
@@ -251,7 +250,6 @@ export default {
     color: white;
     filter: hue-rotate(45deg);
     background-image: linear-gradient(-45deg, #a5d85f, #6399b3);
-    transition: all 0.2s ease;
   }
 
   .page-header {
@@ -302,6 +300,8 @@ export default {
   }
 
   .period-btn {
+    transition: color 0.8s ease;
+
     @media (max-width: 767px) {
       font-size: 18px;
 
@@ -448,6 +448,12 @@ export default {
   .show-more-btn {
     width: 150px;
     margin-bottom: 40px;
+    transition: all 0.2s ease;
+
+    &:hover,
+    &:focus {
+      filter: hue-rotate(90deg);
+    }
   }
 
 </style>
