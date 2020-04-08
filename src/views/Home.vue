@@ -1,44 +1,33 @@
 <template>
-  <div class='home'>
+  <nu-flow gap="4x">
     <!-- <img alt='Vue logo' src='../assets/logo.png' /> -->
     <!-- <HelloWorld msg='Welcome to Your Vue.js App' /> -->
-    <h1 class="page-header">Календарь
-      <a href="https://github.com/web-standards-ru/calendar" target="_blank">Веб-стандартов</a>.
-      <span>Теперь наглядно.*</span>
-      <span class="page-header__description">*non-official version</span>
-    </h1>
-    <div class="filters">
-      <div class="period-btn-wrapper">
-        <button class="period-btn btn" type="button"
-          :class="{ active: type === 'future'}"
-          v-on:click="
-            type = 'future';
-            shownLimit = limitStep;
-            searchQuery = '';">
+    <nu-heading level="1">Календарь
+      <nu-link to="!https://github.com/web-standards-ru/calendar">Веб-стандартов</nu-link>.
+      <nu-el>Теперь наглядно.*</nu-el>
+      <nu-el>*non-official version</nu-el>
+    </nu-heading>
+
+    <nu-pane>
+      <nu-btngroup
+        :value="type"
+        @input="setPeriod($event.detail)">
+        <nu-btn value="future">
           Будущие
-        </button>
-        <button class="period-btn btn" type="button"
-        :class="{ active: type === 'past'}"
-          v-on:click="
-            type = 'past';
-            shownLimit = limitStep;
-            searchQuery = '';">
+        </nu-btn>
+        <nu-btn value="past">
           Прошедшие
-        </button>
-        <button class="period-btn btn" type="button"
-        :class="{ active: type === 'today'}"
-          v-on:click="
-            type = 'today';
-            searchQuery = '';">
+        </nu-btn>
+        <nu-btn value="today">
           Сегодня
-        </button>
-      </div>
+        </nu-btn>
+      </nu-btngroup>
       <label>
         <span class="visually-hidden">Город</span>
         <input class="city-search" type="text" value="" v-model="searchQuery"
           placeholder="Город проведения"/>
       </label>
-    </div>
+    </nu-pane>
 
     <ul class="events-list" id="events">
       <li class="events-item"
@@ -84,9 +73,9 @@
 
 
     <div class="show-more-btn-wrapper" v-if="filteredEvents.length > shownLimit">
-      <button class="btn active show-more-btn" type="button" v-on:click="shownLimit += limitStep">
+      <nu-btn v-on:click="shownLimit += limitStep">
         Показать ещё
-      </button>
+      </nu-btn>
     </div>
 
     <div class="upload-data" v-if="isLoaded">
@@ -99,7 +88,7 @@
         не найдено
       </p>
     </div>
-  </div>
+  </nu-flow>
 </template>
 
 <script>
@@ -213,6 +202,11 @@ export default {
         word = dayNumber + ' дней';
       }
       return word;
+    },
+    setPeriod(type) {
+      this.type = type;
+      this.shownLimit = this.limitStep;
+      this.searchQuery = '';
     },
 
   },
