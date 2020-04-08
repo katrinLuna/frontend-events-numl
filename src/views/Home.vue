@@ -23,53 +23,53 @@
         </nu-btn>
       </nu-btngroup>
       <label>
-        <span class="visually-hidden">Город</span>
+        <nu-el class="visually-hidden">Город</nu-el>
         <input class="city-search" type="text" value="" v-model="searchQuery"
           placeholder="Город проведения"/>
       </label>
     </nu-pane>
 
-    <ul class="events-list" id="events">
-      <li class="events-item"
+    <nu-grid id="events" role="list" gap="2x" columns="1fr 1fr 1fr | 1fr 1fr | 1fr">
+      <nu-card
+        padding
         v-for="event in shownEvents"
         :key="event.uid">
-          <p class="events-item__date">
-            <calendar-icon size="1x" class="events-item__icon"></calendar-icon>
-            <span v-if="getFormattedDate(event.start) === getFormattedDate(event.end)
+          <nu-block>
+            <nu-icon name="calendar"></nu-icon>
+            <nu-el v-if="getFormattedDate(event.start) === getFormattedDate(event.end)
             || event.daysCounted === 1">
               {{ getFormattedDate(event.start) }}
-            </span>
+            </nu-el>
 
-            <span v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)
+            <nu-el v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)
             && event.daysCounted !== 1">
               {{ getFormattedDate(event.start).slice(0, -7) }}
               &mdash;
               {{ event.endCorrected ? getFormattedDate(event.endCorrected)
               : getFormattedDate(event.end) }}
-            </span>
-          </p>
+            </nu-el>
+          </nu-block>
 
-          <a class="events-item__link-wrapper" :href="event.description" target="_blank">
-            <p class="events-item__name">{{ event.summary }}</p>
-          </a>
+          <nu-blocklink :to="`!${event.description}`">
+            {{ event.summary }}
+          </nu-blocklink>
 
-          <div class="events-item__footer">
-            <p class="events-item__time">
-              <clock-icon size="1x" class="events-item__icon events-item__icon--time">
-              </clock-icon>
-              <span v-if="!event.allDay">c {{ getFormattedTime(event.start) }}
+          <nu-pane>
+            <nu-block>
+              <nu-icon name="clock"></nu-icon>
+              <nu-el v-if="!event.allDay">c {{ getFormattedTime(event.start) }}
                 до {{ getFormattedTime(event.end) }}
-              </span>
-              <span v-if="event.allDay">{{ getDaysDeclension(event.daysCounted) }}
-              </span>
-            </p>
-            <p class="events-item__location">
-              <map-pin-icon size="1x" class="events-item__icon"></map-pin-icon>
+              </nu-el>
+              <nu-el v-if="event.allDay">{{ getDaysDeclension(event.daysCounted) }}
+              </nu-el>
+            </nu-block>
+            <nu-block>
+              <nu-icon name="map-pin"></nu-icon>
               {{ event.location }}
-            </p>
-          </div>
-      </li>
-    </ul>
+            </nu-block>
+          </nu-pane>
+      </nu-card>
+    </nu-grid>
 
 
     <div class="show-more-btn-wrapper" v-if="filteredEvents.length > shownLimit">
@@ -84,7 +84,7 @@
 
     <div class="empty-search-result" v-if="shownEvents.length === 0 && !isLoaded">
       <p>Событий
-          <span v-if="searchQuery">в данном городе</span>
+          <nu-el v-if="searchQuery">в данном городе</nu-el>
         не найдено
       </p>
     </div>
@@ -94,15 +94,12 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue';
-import { MapPinIcon, ClockIcon, CalendarIcon } from 'vue-feather-icons';
 import EventsService from '../services/events-service';
 
 export default {
   name: 'Home',
   components: {
-    MapPinIcon,
-    ClockIcon,
-    CalendarIcon,
+
     // HelloWorld,
   },
   data() {
@@ -212,242 +209,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-  .home {
-    width: 90%;
-    margin: 0 auto;
-  }
-
-  .btn {
-    min-width: 125px;
-    height: 36px;
-    padding: 10px;
-    box-sizing: border-box;
-    color: #49839f;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 16px;
-    border: none;
-    border-radius: 5px;
-    background-image: none;
-    background-color: transparent;
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      border-bottom: 2px solid #49839f;
-    }
-  }
-
-  .btn.active {
-    color: white;
-    filter: hue-rotate(45deg);
-    background-image: linear-gradient(-45deg, #a5d85f, #6399b3);
-  }
-
-  .page-header {
-    font-size: 27px;
-    margin-top: 30px;
-    margin-bottom: 35px;
-    text-align: center;
-      color: #2c3e50;
-
-    &__description {
-      display: block;
-      font-size: 14px;
-      text-align: right;
-    }
-
-    & > span,
-    & > a {
-      white-space: nowrap;
-    }
-
-    & > a {
-      color: #2c3e50;
-    }
-  }
-
-  .filters {
-    @media (min-width: 768px) {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-
-    @media (min-width: 1100px) {
-      width: 90%;
-      margin: 0 auto;
-    }
-  }
-
-  .period-btn-wrapper {
-    @media (max-width: 767px) {
-      margin-bottom: 20px;
-    }
-
-    @media (min-width: 768px) {
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-
-  .period-btn {
-    transition: color 0.8s ease;
-
-    @media (max-width: 767px) {
-      font-size: 18px;
-
-      &:first-child {
-        margin-right: 20px;
-      }
-
-      &:last-child {
-        margin-top: 15px;
-      }
-    }
-
-    @media (min-width: 768px) {
-      &:not(:last-child) {
-        margin-right: 20px;
-      }
-    }
-  }
-
-  .city-search {
-    width: 180px;
-    height: 36px;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid grey;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-
-  .events-list {
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 45px;
-    margin-bottom: 40px;
-
-    @media (min-width: 768px) {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 23px 20px;
-    }
-
-    @media (min-width: 1100px) {
-      // grid-template-columns: 27% 27% 27%; найти фикс для IE
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-  }
-
-  .events-item {
-    display: flex;
-    flex-direction: column;
-    border-radius: 5px;
-    padding: 10px;
-    border: 1px solid #49839f;
-    background-color: #fafafd;
-    border-radius: 5px;
-    transition: all 0.1s ease;
-
-    &__time-icon {
-      vertical-align: middle;
-    }
-
-    &:hover,
-    &:focus {
-      box-shadow: 0px 0px 27px -15px;
-    }
-
-    & > p {
-      margin-top: 0;
-    }
-
-    &__date,
-    &__time,
-    &__location {
-      font-size: 16px;
-      font-weight: 500;
-      text-align: left;
-      line-height: 16px;
-    }
-
-    &__date {
-      margin-bottom: 8px;
-    }
-
-    &__link-wrapper {
-      display: grid;
-      place-content: center;
-      flex-grow: 1;
-      min-height: 100px;
-      margin-left: -10px;
-      margin-right: -10px;
-      margin-bottom: 8px;
-      text-decoration: none;
-      color: #2a5265;
-      transition: all 0.1s ease;
-
-      @media (hover: hover) {
-        &:hover p,
-        &:focus p {
-          color: #54819d;
-        }
-
-        &:hover,
-        &:focus {
-          background-color: #e6e6e6;
-        }
-      }
-
-    }
-
-    @media (max-width: 767px) {
-      margin-bottom: 20px;
-    }
-
-    &__name {
-      margin-top: 0;
-      margin-bottom: 0;
-      padding: 20px 25px;
-      font-size: 25px;
-      font-weight: 600;
-      color: #77bcab;
-      line-height: 30px;
-    }
-
-    &__footer {
-      display: flex;
-      justify-content: space-between;
-      line-height: 16px;
-
-      & > p {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-    }
-
-    &__icon {
-      vertical-align: -0.15em;
-
-      &--time {
-        margin-right: 5px;
-      }
-    }
-  }
-
-  .show-more-btn {
-    width: 150px;
-    margin-bottom: 40px;
-    transition: all 0.2s ease;
-
-    &:hover,
-    &:focus {
-      filter: hue-rotate(90deg);
-    }
-  }
-
-</style>
