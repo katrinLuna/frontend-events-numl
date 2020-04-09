@@ -1,7 +1,5 @@
 <template>
   <nu-flow gap="4x">
-    <!-- <img alt='Vue logo' src='../assets/logo.png' /> -->
-    <!-- <HelloWorld msg='Welcome to Your Vue.js App' /> -->
     <nu-heading level="1" text="center w6">Календарь
       <nu-link to="!https://github.com/web-standards-ru/calendar">Веб-стандартов</nu-link>.
       <nu-el>Теперь наглядно.*</nu-el>
