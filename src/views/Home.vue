@@ -2,16 +2,14 @@
   <nu-flow gap="4x">
     <!-- <img alt='Vue logo' src='../assets/logo.png' /> -->
     <!-- <HelloWorld msg='Welcome to Your Vue.js App' /> -->
-    <nu-heading level="1">Календарь
+    <nu-heading level="1" text="center w6">Календарь
       <nu-link to="!https://github.com/web-standards-ru/calendar">Веб-стандартов</nu-link>.
       <nu-el>Теперь наглядно.*</nu-el>
-      <nu-el>*non-official version</nu-el>
+      <nu-block text="right w6" size="md">*non-official version</nu-block>
     </nu-heading>
 
     <nu-pane>
-      <nu-btngroup
-        :value="type"
-        @input="setPeriod($event.detail)">
+      <nu-btngroup :value="type" @input="setPeriod($event.detail)" gap="2x">
         <nu-btn value="future">
           Будущие
         </nu-btn>
@@ -22,19 +20,18 @@
           Сегодня
         </nu-btn>
       </nu-btngroup>
-      <label>
-        <nu-el class="visually-hidden">Город</nu-el>
-        <input class="city-search" type="text" value="" v-model="searchQuery"
-          placeholder="Город проведения"/>
-      </label>
+      <nu-input :value="searchQuery" @input="searchQuery = $event.detail"
+        placeholder="Город проведения" label="Поиск по городу"/>
     </nu-pane>
 
     <nu-grid id="events" role="list" gap="2x" columns="1fr 1fr 1fr | 1fr 1fr | 1fr">
       <nu-card
-        padding
+        role="listitem"
+        display="flex"
+        padding="0"
         v-for="event in shownEvents"
         :key="event.uid">
-          <nu-block>
+          <nu-flex padding gap>
             <nu-icon name="calendar"></nu-icon>
             <nu-el v-if="getFormattedDate(event.start) === getFormattedDate(event.end)
             || event.daysCounted === 1">
@@ -48,46 +45,52 @@
               {{ event.endCorrected ? getFormattedDate(event.endCorrected)
               : getFormattedDate(event.end) }}
             </nu-el>
-          </nu-block>
+          </nu-flex>
 
-          <nu-blocklink :to="`!${event.description}`">
+          <nu-blocklink :to="`!${event.description}`"
+            display="grid"
+            items="center"
+            grow="1"
+            padding="4x"
+            size="h3"
+            text="no-decoration w6 center wrap">
             {{ event.summary }}
           </nu-blocklink>
 
-          <nu-pane>
-            <nu-block>
+          <nu-pane padding>
+            <nu-flex gap text="nowrap">
               <nu-icon name="clock"></nu-icon>
               <nu-el v-if="!event.allDay">c {{ getFormattedTime(event.start) }}
                 до {{ getFormattedTime(event.end) }}
               </nu-el>
               <nu-el v-if="event.allDay">{{ getDaysDeclension(event.daysCounted) }}
               </nu-el>
-            </nu-block>
-            <nu-block>
+            </nu-flex>
+            <nu-flex gap text="nowrap" width="max(45%)">
               <nu-icon name="map-pin"></nu-icon>
-              {{ event.location }}
-            </nu-block>
+              <nu-el text="ellipsis">{{ event.location }}</nu-el>
+            </nu-flex>
           </nu-pane>
       </nu-card>
     </nu-grid>
 
 
-    <div class="show-more-btn-wrapper" v-if="filteredEvents.length > shownLimit">
+    <nu-block v-if="filteredEvents.length > shownLimit" text="center">
       <nu-btn v-on:click="shownLimit += limitStep">
         Показать ещё
       </nu-btn>
-    </div>
+    </nu-block>
 
-    <div class="upload-data" v-if="isLoaded">
+    <nu-block v-if="isLoaded" text="center">
       <p>Данные загружаются</p>
-    </div>
+    </nu-block>
 
-    <div class="empty-search-result" v-if="shownEvents.length === 0 && !isLoaded">
+    <nu-block v-if="shownEvents.length === 0 && !isLoaded" text="center">
       <p>Событий
           <nu-el v-if="searchQuery">в данном городе</nu-el>
         не найдено
       </p>
-    </div>
+    </nu-block>
   </nu-flow>
 </template>
 
