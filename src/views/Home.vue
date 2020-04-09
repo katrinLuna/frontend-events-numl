@@ -9,7 +9,7 @@
     </nu-heading>
 
     <nu-pane gap="2x" flow="row||column">
-      <nu-attrs for="nu-btn"></nu-attrs>
+      <nu-attrs for="nu-btn" toggle="0 :active[1]" fill="bg :pressed[special-bg]"></nu-attrs>
       <nu-block>
         <nu-btngroup :value="type" @input="setPeriod($event.detail)" gap="2x" flow="row wrap">
           <nu-btn value="future">
@@ -25,19 +25,22 @@
       </nu-block>
       <nu-block width="15||clamp(initial, 100%, 20rem)">
         <nu-input :value="searchQuery" @input="searchQuery = $event.detail"
-          placeholder="Город проведения" label="Поиск по городу" width="100%"/>
+          placeholder="Город проведения" label="Поиск по городу" width="100%" columns="auto 1fr">
+          <nu-icon name="search"></nu-icon>
+        </nu-input>
       </nu-block>
     </nu-pane>
 
     <nu-grid id="events" role="list" gap="2x" columns="1fr 1fr 1fr | 1fr 1fr | 1fr">
       <nu-card
+        v-for="event in shownEvents"
+        :key="event.uid"
         role="listitem"
         display="grid"
         flow="column"
         rows="auto 1fr auto"
         padding="0"
-        v-for="event in shownEvents"
-        :key="event.uid">
+        shadow="0 color(clear) :hover[1]">
           <nu-flex padding gap>
             <nu-icon name="calendar"></nu-icon>
             <nu-el v-if="getFormattedDate(event.start) === getFormattedDate(event.end)
@@ -45,13 +48,15 @@
               {{ getFormattedDate(event.start) }}
             </nu-el>
 
-            <nu-el v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)
-            && event.daysCounted !== 1">
-              {{ getFormattedDate(event.start).slice(0, -7) }}
-              &mdash;
-              {{ event.endCorrected ? getFormattedDate(event.endCorrected)
+            <nu-flex v-if="getFormattedDate(event.start) !== getFormattedDate(event.end)
+            && event.daysCounted !== 1" gap="0 1x" flow="row wrap">
+              <nu-el>{{ getFormattedDate(event.start).slice(0, -7) }}</nu-el>
+              <nu-el text="nowrap">
+                &mdash;
+                {{ event.endCorrected ? getFormattedDate(event.endCorrected)
               : getFormattedDate(event.end) }}
-            </nu-el>
+              </nu-el>
+            </nu-flex>
           </nu-flex>
 
           <nu-blocklink :to="`!${event.description}`"
@@ -65,26 +70,28 @@
             {{ event.summary }}
           </nu-blocklink>
 
-          <nu-pane padding flow="row|||column">
-            <nu-flex gap text="nowrap">
-              <nu-icon name="clock"></nu-icon>
-              <nu-el v-if="!event.allDay">c {{ getFormattedTime(event.start) }}
-                до {{ getFormattedTime(event.end) }}
-              </nu-el>
-              <nu-el v-if="event.allDay">{{ getDaysDeclension(event.daysCounted) }}
-              </nu-el>
-            </nu-flex>
-            <nu-flex gap text="nowrap" width="max(45%)|||initial">
-              <nu-icon name="map-pin"></nu-icon>
-              <nu-el text="ellipsis">{{ event.location }}</nu-el>
-            </nu-flex>
-          </nu-pane>
+          <nu-block>
+            <nu-pane padding flow="row wrap" items="center|||flex-start">
+              <nu-flex gap text="nowrap">
+                <nu-icon name="clock"></nu-icon>
+                <nu-el v-if="!event.allDay">c {{ getFormattedTime(event.start) }}
+                  до {{ getFormattedTime(event.end) }}
+                </nu-el>
+                <nu-el v-if="event.allDay">{{ getDaysDeclension(event.daysCounted) }}
+                </nu-el>
+              </nu-flex>
+              <nu-flex gap text="nowrap">
+                <nu-icon name="map-pin"></nu-icon>
+                <nu-el text="ellipsis">{{ event.location }}</nu-el>
+              </nu-flex>
+            </nu-pane>
+          </nu-block>
       </nu-card>
     </nu-grid>
 
 
     <nu-block v-if="filteredEvents.length > shownLimit" text="center">
-      <nu-btn v-on:click="shownLimit += limitStep">
+      <nu-btn v-on:click="shownLimit += limitStep" fill="special-bg">
         Показать ещё
       </nu-btn>
     </nu-block>
