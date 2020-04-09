@@ -8,26 +8,33 @@
       <nu-block text="right w6" size="md">*non-official version</nu-block>
     </nu-heading>
 
-    <nu-pane>
-      <nu-btngroup :value="type" @input="setPeriod($event.detail)" gap="2x">
-        <nu-btn value="future">
-          Будущие
-        </nu-btn>
-        <nu-btn value="past">
-          Прошедшие
-        </nu-btn>
-        <nu-btn value="today">
-          Сегодня
-        </nu-btn>
-      </nu-btngroup>
-      <nu-input :value="searchQuery" @input="searchQuery = $event.detail"
-        placeholder="Город проведения" label="Поиск по городу"/>
+    <nu-pane gap="2x" flow="row||column">
+      <nu-attrs for="nu-btn"></nu-attrs>
+      <nu-block>
+        <nu-btngroup :value="type" @input="setPeriod($event.detail)" gap="2x" flow="row wrap">
+          <nu-btn value="future">
+            Будущие
+          </nu-btn>
+          <nu-btn value="past">
+            Прошедшие
+          </nu-btn>
+          <nu-btn value="today">
+            Сегодня
+          </nu-btn>
+        </nu-btngroup>
+      </nu-block>
+      <nu-block width="15||clamp(initial, 100%, 20rem)">
+        <nu-input :value="searchQuery" @input="searchQuery = $event.detail"
+          placeholder="Город проведения" label="Поиск по городу" width="100%"/>
+      </nu-block>
     </nu-pane>
 
     <nu-grid id="events" role="list" gap="2x" columns="1fr 1fr 1fr | 1fr 1fr | 1fr">
       <nu-card
         role="listitem"
-        display="flex"
+        display="grid"
+        flow="column"
+        rows="auto 1fr auto"
         padding="0"
         v-for="event in shownEvents"
         :key="event.uid">
@@ -49,15 +56,16 @@
 
           <nu-blocklink :to="`!${event.description}`"
             display="grid"
-            items="center"
-            grow="1"
-            padding="4x"
+            items="center stretch"
+            theme="tint soft :hover[tint]"
+            focusable="inset"
+            padding="4x 2x"
             size="h3"
             text="no-decoration w6 center wrap">
             {{ event.summary }}
           </nu-blocklink>
 
-          <nu-pane padding>
+          <nu-pane padding flow="row|||column">
             <nu-flex gap text="nowrap">
               <nu-icon name="clock"></nu-icon>
               <nu-el v-if="!event.allDay">c {{ getFormattedTime(event.start) }}
@@ -66,7 +74,7 @@
               <nu-el v-if="event.allDay">{{ getDaysDeclension(event.daysCounted) }}
               </nu-el>
             </nu-flex>
-            <nu-flex gap text="nowrap" width="max(45%)">
+            <nu-flex gap text="nowrap" width="max(45%)|||initial">
               <nu-icon name="map-pin"></nu-icon>
               <nu-el text="ellipsis">{{ event.location }}</nu-el>
             </nu-flex>
