@@ -11,7 +11,7 @@
     <nu-pane gap="2x" flow="row||column">
       <nu-attrs for="nu-btn" toggle="0 :active[1]" fill="bg :pressed[special-bg]"></nu-attrs>
       <nu-block>
-        <nu-btngroup :value="type" @input="setPeriod($event.detail)" gap="2x" flow="row wrap">
+        <nu-btngroup :value="type" @input="setPeriod($event.detail)" gap="1x" flow="row wrap">
           <nu-btn value="future">
             Будущие
           </nu-btn>
