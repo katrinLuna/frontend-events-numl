@@ -6,7 +6,7 @@
       <router-link to="/">События</router-link> |
       <router-link to="/about">О календаре</router-link>
     </div>-->
-    <nu-block width="90%" grow="1">
+    <nu-block width="clamp(initial, 90%, 1440px)" grow="1">
       <router-view />
     </nu-block>
     <nu-block text="w4">

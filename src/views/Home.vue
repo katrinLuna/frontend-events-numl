@@ -126,8 +126,8 @@ export default {
       searchQuery: '',
       currentDate: '',
       isLoaded: true,
-      shownLimit: 10,
-      limitStep: 10,
+      shownLimit: 12,
+      limitStep: 12,
       isCashed: false,
     };
   },
