@@ -10,7 +10,9 @@
       <router-view />
     </nu-block>
     <nu-block text="w4">
-      made w/love by
+      made w/love and
+      <nu-link to="!https://numl.design/" text="w5">NuML</nu-link>
+      by
       <nu-link to="!https://github.com/katrinLuna" text="w5">Katrin Luna</nu-link>
     </nu-block>
   </nu-flex>
