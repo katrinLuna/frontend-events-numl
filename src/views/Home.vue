@@ -145,7 +145,7 @@ export default {
       /* eslint-disable-next-line no-param-reassign */
         element.location = 'Online';
         /* eslint-disable-next-line no-param-reassign */
-        element.searchLocation = 'Online';
+        element.searchLocation = 'online, онлайн';
       }
 
       if (element.allDay) {
