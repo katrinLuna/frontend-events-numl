@@ -138,8 +138,16 @@ export default {
     const futureEvents = [];
     const pastEvents = [];
     data.forEach((element) => {
+      if (element.location) {
       /* eslint-disable-next-line no-param-reassign */
-      element.searchLocation = element.location.toLowerCase();
+        element.searchLocation = element.location.toLowerCase();
+      } else {
+      /* eslint-disable-next-line no-param-reassign */
+        element.location = 'Online';
+        /* eslint-disable-next-line no-param-reassign */
+        element.searchLocation = 'Online';
+      }
+
       if (element.allDay) {
         /* eslint-disable-next-line no-param-reassign */
         element.daysCounted = Math.ceil((new Date(element.end).getTime()
